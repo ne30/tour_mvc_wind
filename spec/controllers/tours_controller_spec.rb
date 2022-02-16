@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe ToursController, type: :controller do
 
     describe "#new" do
-        it 'render to add_tour' do 
+        it 'render to add_tour_path' do 
             allow_any_instance_of(ToursController).to receive(:checkUser).and_return(:true)
             get :new
             expect(response).to have_http_status(200)
@@ -11,14 +11,14 @@ RSpec.describe ToursController, type: :controller do
     end
 
     describe "#create" do
-        it 'successfully adding tour' do
+        it 'it successfully adds the tour in database' do
             allow_any_instance_of(ToursController).to receive(:checkUser).and_return(:true)
             post(:create, params: { "tour_code"=>"080", "from"=>"Indore", "to"=>"Bhopal", "start_time"=>"18:00", "end_time"=>"10:00", "passenger_limit"=>"11", "price"=>"1111", "date"=>"2022-02-13"})
             expect(response).to redirect_to(tours_path)
             expect(flash[:success]).to be_present
         end
   
-        it 'Missing some param for tour does not add the data in db' do
+        it 'it will not add the tour as it is missing some param for tour' do
             allow_any_instance_of(ToursController).to receive(:checkUser).and_return(:true)
             post(:create, params: { "tour_code"=>"", "from"=>"Indore", "to"=>"Bhopal", "start_time"=>"18:00", "end_time"=>"10:00", "passenger_limit"=>"-11", "price"=>"1111", "date"=>"2022-02-13"})
             expect(response).to redirect_to(add_tour_path)
